@@ -7,9 +7,9 @@ import (
 	"io"
 )
 
-func main() {
+func SplitFile(filepath string) {
 	// open a file
-	file, err := os.Open("yeah_0-524290.txt")
+	file, err := os.Open(filepath)
 	if err != nil {
 		fmt.Println("main.go: open input:", err)
 	}
