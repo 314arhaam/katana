@@ -7,11 +7,11 @@ import (
 	"io"
 )
 
-func SplitFile(filepath string) {
+func SplitFile(filepath string) error {
 	// open a file
 	file, err := os.Open(filepath)
 	if err != nil {
-		fmt.Println("main.go: open input:", err)
+		return fmt.Errorf("split.go: open input:", err)
 	}
 	defer file.Close()
 	// chunk it
@@ -25,25 +25,23 @@ func SplitFile(filepath string) {
 				chunk = chunk[:num]
 				eofOccured = true
 			} else {
-				fmt.Println("main.go: read input:", err)
-				return	
+				return fmt.Errorf("split.go: read input:", err)	
 			}
 		}
 		filename := "part-" + strconv.Itoa(int(part)) + ".katana"
 		output, err := os.Create(filename)
 		if err != nil {
-			fmt.Println("main.go: create output:", err)
-			return
+			return fmt.Errorf("split.go: create output:", err)
 		}
 		defer output.Close()
 		if _, err := output.Write(chunk); err != nil {
 			if err == io.EOF {
 				eofOccured = true
 			} else {
-				fmt.Println("main.go: write to output:", err)
-				return	
+				return fmt.Errorf("split.go: write to output:", err)	
 			}
 		}
 		part += 1
 	}
+	return nil
 }
