@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"strconv"
 	"io"
+	"path"
 )
 
 func SplitFile(filepath string) error {
+	// get filename from path
+	filename := path.Base(filepath)
 	// open a file
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -28,8 +31,8 @@ func SplitFile(filepath string) error {
 				return fmt.Errorf("split.go: read input:", err)	
 			}
 		}
-		filename := "part-" + strconv.Itoa(int(part)) + ".katana"
-		output, err := os.Create(filename)
+		partname := filename + "." + strconv.Itoa(int(part)) + ".katana"
+		output, err := os.Create(partname)
 		if err != nil {
 			return fmt.Errorf("split.go: create output:", err)
 		}
