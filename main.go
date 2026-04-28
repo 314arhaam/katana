@@ -14,6 +14,12 @@ func main() {
 	}
 	switch os.Args[1] {
 	case "split":
+		cli := clitools.SplitCLIArgs{}
+		cli.Init()
+		if err := cmd.SplitFile(*cli.Filepath); err != nil {
+			fmt.Println("main.go: `split`:", err)
+			return
+		}
 		//
 	default:
 		fmt.Println("main.go: unknown subcommand")
