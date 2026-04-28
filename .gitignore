@@ -1,0 +1,12 @@
+bin/*
+.env
+data/*
+test
+Dockerfile_
+cherknevis.go
+logs/*
+cron.sh
+vendor/*
+.venv
+plots/*
+yeah_*
