@@ -3,8 +3,7 @@ package main
 import (
 	"os"
 	"fmt"
-	"strconv"
-	"io"
+	"local/katana/cmd"
 )
 
 func main() {
