@@ -2,7 +2,8 @@ package clitools
 
 import (
 	"flag"
-	"string"
+	"strings"
+	"os"
 )
 
 type SplitCLIArgs struct {
@@ -11,7 +12,9 @@ type SplitCLIArgs struct {
 }
 
 func (c *SplitCLIArgs) Init() {
-	c.Filepath = flag.String("-f", "", "Name of the file to split")
+	splitCmd := flag.NewFlagSet("split", flag.ExitOnError)
+	c.Filepath = splitCmd.String("f", "", "Name of the file to split")
+	splitCmd.Parse(os.Args[2:])
 	subs := strings.Split(*c.Filepath, "/")
 	c.Filename = subs[len(subs)-1]
 }
