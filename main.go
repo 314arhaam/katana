@@ -4,6 +4,7 @@ import (
 	"os"
 	"fmt"
 	"local/katana/cmd"
+	"local/katana/internal/clitools"
 )
 
 func main() {
