@@ -10,3 +10,4 @@ vendor/*
 .venv
 plots/*
 yeah_*
+go.sum
