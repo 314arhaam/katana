@@ -14,6 +14,9 @@ func MergeParts(filepath string) error {
 	filedir := path.Dir(filepath)
 	filename := path.Base(filepath)
 	filePartNames, err := iotools.GetParts(filename, filedir)
+	if err != nil {
+		return fmt.Errorf("merge.go: MergeParts(...):å ", err)
+	}
 	slices.SortFunc(
 		filePartNames,
 		iotools.SortParts(filename),
