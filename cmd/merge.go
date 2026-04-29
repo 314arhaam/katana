@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	// "fmt"
 	"os"
 	"path"
 	"strings"
@@ -10,7 +10,7 @@ import (
 	"io"
 )
 
-func MergeParts(filepath string){
+func MergeParts(filepath string) error {
 	filedir := path.Dir(filepath)
 	filename := path.Base(filepath)
 	parts, _ := os.ReadDir(filedir)
@@ -22,7 +22,7 @@ func MergeParts(filepath string){
 	}
 	slices.SortFunc(
 		partFiles,
-		func(a, b string){
+		func(a, b string) int {
 			x, _ := strconv.Atoi(strings.Split(a, filepath + ".")[1])
 			y, _ := strconv.Atoi(strings.Split(b, filepath + ".")[1])
 			if x > y {
@@ -31,7 +31,7 @@ func MergeParts(filepath string){
 				return -1
 			}
 			return 0
-		}
+		},
 	)
 	file, _ := os.Create("katana_" + filename)
 	defer file.Close()
@@ -43,4 +43,5 @@ func MergeParts(filepath string){
 		file.WriteAt(data, int64(i*chunkSize))
 		pff.Close()
 	}
+	return nil
 }
