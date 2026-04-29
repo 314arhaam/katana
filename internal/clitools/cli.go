@@ -15,6 +15,12 @@ func (c *SplitCLIArgs) Init() {
 	splitCmd.Parse(os.Args[2:])
 }
 
-type MergeCLIArgs struct {}
+type MergeCLIArgs struct {
+	Filepath	*string
+}
 
-func (c *MergeCLIArgs) Init() {}
+func (c *MergeCLIArgs) Init() {
+	mergeCmd := flag.NewFlagSet("merge", flag.ExitOnError)
+	c.Filepath = mergeCmd.String("f", "", "Name of the root file to merge")
+	mergeCmd.Parse(os.Args[2:])
+}
