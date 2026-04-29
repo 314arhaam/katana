@@ -20,7 +20,13 @@ func main() {
 			fmt.Println("main.go: `split`:", err)
 			return
 		}
-		//
+	case "merge":
+		cli := clitools.MergeCLIArgs{}
+		cli.Init()
+		if err := cmd.MergeParts(*cli.Filepath); err != nil {
+			fmt.Println("main.go: `merge`:", err)
+			return
+		}
 	default:
 		fmt.Println("main.go: unknown subcommand")
 	}
