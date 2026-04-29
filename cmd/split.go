@@ -8,7 +8,7 @@ import (
 	"path"
 )
 
-func SplitFile(filepath string) error {
+func SplitFile(filepath string, chunkSize int) error {
 	// get filename from path
 	filename := path.Base(filepath)
 	// open a file
@@ -19,7 +19,7 @@ func SplitFile(filepath string) error {
 	defer file.Close()
 	// chunk it
 	part := int(0)
-	chunkSize := int(512*1024)
+	// chunkSize := int(512*1024)
 	eofOccured := false
 	for !eofOccured {
 		chunk := make([]byte, chunkSize)
