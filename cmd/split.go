@@ -31,7 +31,7 @@ func SplitFile(filepath string) error {
 				return fmt.Errorf("split.go: read input:", err)	
 			}
 		}
-		partname := filename + "." + strconv.Itoa(int(part)) + ".katana"
+		partname := filename + "." + strconv.Itoa(int(part))
 		output, err := os.Create(partname)
 		if err != nil {
 			return fmt.Errorf("split.go: create output:", err)
