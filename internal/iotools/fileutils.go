@@ -18,6 +18,9 @@ func GetParts(filename, filedir string) ([]string, error) {
 			partFiles = append(partFiles, stuff.Name())
 		}
 	}
+	if len(partFiles) == 0 {
+		return partFiles, fmt.Errorf("fileutils.go: GetParts(...): No partitions found for file: ", filename)
+	}
 	return partFiles, nil
 }
 
