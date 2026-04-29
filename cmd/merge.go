@@ -1,27 +1,22 @@
 package cmd
 
 import (
-	// "fmt"
+	"fmt"
 	"os"
 	"path"
 	"strings"
 	"slices"
 	"strconv"
 	"io"
+	"local/katana/internal/iotools"
 )
 
 func MergeParts(filepath string) error {
 	filedir := path.Dir(filepath)
 	filename := path.Base(filepath)
-	parts, _ := os.ReadDir(filedir)
-	partFiles := make([]string, 0)
-	for _, p := range parts {
-		if ! p.IsDir() && strings.Contains(p.Name(), filename + ".") {
-			partFiles = append(partFiles, p.Name())
-		}
-	}
+	filePartNames, err := iotools.GetParts(filename, filedir)
 	slices.SortFunc(
-		partFiles,
+		filePartNames,
 		func(a, b string) int {
 			x, _ := strconv.Atoi(strings.Split(a, filepath + ".")[1])
 			y, _ := strconv.Atoi(strings.Split(b, filepath + ".")[1])
@@ -33,15 +28,25 @@ func MergeParts(filepath string) error {
 			return 0
 		},
 	)
-	file, _ := os.Create("katana_" + filename)
+	file, err := os.Create("katana_" + filename)
+	if err != nil {
+		return fmt.Errorf("merge.go: MergeParts(...): create output file: ", err)
+	}
 	defer file.Close()
 	chunkSize := 512*1024
-	for i, pn := range partFiles {
-		pf := path.Join(filedir, pn)
-		pff, _ := os.Open(pf)
-		data, _ := io.ReadAll(pff)
-		file.WriteAt(data, int64(i*chunkSize))
-		pff.Close()
+	for i, partName := range filePartNames {
+		partFile, err := os.Open(path.Join(filedir, partName))
+		if err != nil {
+			return fmt.Errorf("merge.go: MergeParts(...): open partition file: ", err)
+		}
+		data, err := io.ReadAll(partFile)
+		if err != nil {
+			return fmt.Errorf("merge.go: MergeParts(...): read partition file: ", err)
+		}
+		if _, err := file.WriteAt(data, int64(i*chunkSize)); err != nil {
+			fmt.Errorf("merge.go: MergeParts(...): write partition data to output: ", err)
+		}
+		partFile.Close()
 	}
 	return nil
 }
