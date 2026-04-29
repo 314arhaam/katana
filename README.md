@@ -52,3 +52,15 @@ This is just for test. Compares size of the original file (if available) and mer
 ./katana check input.txt katana_input.txt
 # output: true
 ```
+
+## TODO
+
+### Features
+- [ ] Adding custom chunk size
+- [ ] Adding unit tests
+- [ ] E2E tests on different file formats
+
+### Futures!
+- [ ] Adding RSA E2E encryption for key exchange
+- [ ] Adding AES encryption for chunks
+- [ ] Adding Key-Gen for RSA and AES
