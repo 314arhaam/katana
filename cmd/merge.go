@@ -12,6 +12,7 @@ import (
 )
 
 func MergeParts(filepath string) error {
+	chunkSize := 512*1024
 	filedir := path.Dir(filepath)
 	filename := path.Base(filepath)
 	filePartNames, err := iotools.GetParts(filename, filedir)
@@ -33,7 +34,6 @@ func MergeParts(filepath string) error {
 		return fmt.Errorf("merge.go: MergeParts(...): create output file: ", err)
 	}
 	defer file.Close()
-	chunkSize := 512*1024
 	for i, partName := range filePartNames {
 		partFile, err := os.Open(path.Join(filedir, partName))
 		if err != nil {
