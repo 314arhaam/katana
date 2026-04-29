@@ -14,10 +14,10 @@ jobs:
           - os: ubuntu-latest
             goos: linux
             bin: katana-linux-amd64
-          - os: windows-2019
+          - os: windows-latest
             goos: windows
             bin: katana-windows-amd64.exe
-          - os: macos-12
+          - os: macos-latest
             goos: darwin
             bin: katana-darwin-amd64
     runs-on: ${{ matrix.os }}
