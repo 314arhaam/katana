@@ -26,8 +26,14 @@ func GetParts(filename, filedir string) ([]string, error) {
 
 func SortParts(filepath string) func(string, string) int {
 	return func(a, b string) int {
-		x, _ := strconv.Atoi(strings.Split(a, filepath + ".")[1])
-		y, _ := strconv.Atoi(strings.Split(b, filepath + ".")[1])
+		x, err := strconv.Atoi(strings.Split(a, filepath + ".")[1])
+		if err != nil {
+			panic("Error in SortParts")
+		}
+		y, err := strconv.Atoi(strings.Split(b, filepath + ".")[1])
+		if err != nil {
+			panic("Error in SortParts")
+		}
 		if x > y {
 			return 1
 		} else if x < y {
