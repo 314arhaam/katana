@@ -4,6 +4,7 @@ import (
 	"os"
 	"fmt"
 	"strings"
+	"strconv"
 )
 
 func GetParts(filename, filedir string) ([]string, error) {
@@ -20,9 +21,8 @@ func GetParts(filename, filedir string) ([]string, error) {
 	return partFiles, nil
 }
 
-/*
-func GetFileSorter(filepath string) func(string, string) int {
-	return func(a, b string){
+func SortParts(filepath string) func(string, string) int {
+	return func(a, b string) int {
 		x, _ := strconv.Atoi(strings.Split(a, filepath + ".")[1])
 		y, _ := strconv.Atoi(strings.Split(b, filepath + ".")[1])
 		if x > y {
@@ -32,4 +32,4 @@ func GetFileSorter(filepath string) func(string, string) int {
 		}
 		return 0
 	}
-}*/
+}
