@@ -11,3 +11,7 @@ vendor/*
 plots/*
 yeah_*
 go.sum
+*.txt
+*.pdf
+*.txt*
+*.pdf*
