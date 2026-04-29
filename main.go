@@ -16,7 +16,7 @@ func main() {
 	case "split":
 		cli := clitools.SplitCLIArgs{}
 		cli.Init()
-		if err := cmd.SplitFile(*cli.Filepath); err != nil {
+		if err := cmd.SplitFile(*cli.Filepath, (*cli.ChunkSize)*1024); err != nil {
 			fmt.Println("main.go: `split`:", err)
 			return
 		}
