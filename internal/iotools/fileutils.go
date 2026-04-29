@@ -3,17 +3,18 @@ package iotools
 import (
 	"os"
 	"fmt"
+	"strings"
 )
 
 func GetParts(filename, filedir string) ([]string, error) {
 	partFiles := make([]string, 0)
 	stuffsInDir, err := os.ReadDir(filedir)
 	if err != nil {
-		return partFiles, fmt.Errorf("fileutils.go: GetParts(...): ", error)
+		return partFiles, fmt.Errorf("fileutils.go: GetParts(...): ", err)
 	}
 	for _, stuff := range stuffsInDir {
 		if ! stuff.IsDir() && strings.Contains(stuff.Name(), filename + ".") {
-			partFiles = append(partFiles, p.Name())
+			partFiles = append(partFiles, stuff.Name())
 		}
 	}
 	return partFiles, nil
