@@ -42,6 +42,9 @@ func SplitFile(filepath string, chunkSize int) error {
 	for !eofOccured {
 		chunk := make([]byte, chunkSize)
 		if num, err := file.ReadAt(chunk, int64(part*chunkSize)); err != nil{
+			if num == 0 {
+				return nil
+			}
 			if err == io.EOF {
 				chunk = chunk[:num]
 				eofOccured = true
