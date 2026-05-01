@@ -6,13 +6,11 @@ on:
     branches: [master]
     types: 
       - completed
-
-# on:
-  # workflow_dispatch:
-    # inputs:
-      # tag:
-        # description: 'Git tag to send binaries from (e.g., v1.0.0)'
-        # required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag to send binaries from (e.g., v1.0.0)'
+        required: true
 
 jobs:
   send_release_to_telegram:
@@ -26,7 +24,7 @@ jobs:
         uses: robinraju/release-downloader@v1
         with:
           tag: ${{ github.event.inputs.tag }}
-          fileName: 'yeah-*'
+          fileName: 'katana-*'
           tarBall: false
           zipBall: false
 
@@ -37,7 +35,7 @@ jobs:
         run: |
           echo "Calculating checksums..."
           # For each expected binary, generate checksum
-          for f in yeah-linux-amd64 yeah-darwin-amd64 yeah-windows-amd64.exe; do
+          for f in katana-linux-amd64 katana-darwin-amd64 katana-windows-amd64.exe; do
             if [[ -f "$f" ]]; then
               sha256sum "$f" >> checksums.txt
             fi
@@ -73,7 +71,7 @@ jobs:
           echo "Uploading binaries to Telegram..."
 
           # Loop through known binaries
-          for FILE in yeah-linux-amd64 yeah-darwin-amd64 yeah-windows-amd64.exe; do
+          for FILE in katana-linux-amd64 katana-darwin-amd64 katana-windows-amd64.exe; do
             if [[ -f "$FILE" ]]; then
               CHECKSUM=$(grep "$FILE" checksums.txt | awk '{print $1}')
               CAPTION="📦 \ 
