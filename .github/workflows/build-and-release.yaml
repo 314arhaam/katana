@@ -13,13 +13,13 @@ jobs:
         include:
           - os: ubuntu-latest
             goos: linux
-            bin: yeah-linux-amd64
+            bin: katana-linux-amd64
           - os: windows-latest
             goos: windows
-            bin: yeah-windows-amd64.exe
+            bin: katana-windows-amd64.exe
           - os: macos-latest
             goos: darwin
-            bin: yeah-darwin-amd64
+            bin: katana-darwin-amd64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
       - name: build
         shell: bash
         run: |
-          GOOS='${{ matrix.goos }}' GOARCH='amd64' CGO_ENABLED=0 go build -o '${{ matrix.bin }}' cmd/main.go
+          GOOS='${{ matrix.goos }}' GOARCH='amd64' CGO_ENABLED=0 go build -o '${{ matrix.bin }}' main.go
 
       - uses: actions/upload-artifact@v4
         with:
@@ -66,8 +66,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/yeah-linux-amd64/yeah-linux-amd64
-          asset_name: yeah-linux-amd64
+          asset_path: artifacts/katana-linux-amd64/katana-linux-amd64
+          asset_name: katana-linux-amd64
           asset_content_type: application/octet-stream
 
       - name: upload macos
@@ -76,8 +76,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/yeah-darwin-amd64/yeah-darwin-amd64
-          asset_name: yeah-darwin-amd64
+          asset_path: artifacts/katana-darwin-amd64/katana-darwin-amd64
+          asset_name: katana-darwin-amd64
           asset_content_type: application/octet-stream
 
       - name: upload windows
@@ -86,6 +86,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/yeah-windows-amd64.exe/yeah-windows-amd64.exe
-          asset_name: yeah-windows-amd64.exe
+          asset_path: artifacts/katana-windows-amd64.exe/katana-windows-amd64.exe
+          asset_name: katana-windows-amd64.exe
           asset_content_type: application/vnd.microsoft.portable-executable
