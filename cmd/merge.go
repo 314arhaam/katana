@@ -27,6 +27,14 @@ func MergeParts(filepath string) error {
 	}
 	defer file.Close()
 	for i, partName := range filePartNames {
+
+if i == 0 {
+        fileinfo, err := os.Stat(path.Join(filedir, partName))
+        if err != nil {
+                return fmt.Errorf("merge.go: MergeParts(...): stat partition file: ", err)
+        }
+        chunkSize = fileinfo.Size()
+}
 		partFile, err := os.Open(path.Join(filedir, partName))
 		if err != nil {
 			return fmt.Errorf("merge.go: MergeParts(...): open partition file: ", err)
