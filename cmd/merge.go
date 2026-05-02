@@ -10,7 +10,7 @@ import (
 )
 
 func MergeParts(filepath string) error {
-	chunkSize := 512*1024
+	chunkSize := int64(0)
 	filedir := path.Dir(filepath)
 	filename := path.Base(filepath)
 	filePartNames, err := iotools.GetParts(filename, filedir)
@@ -44,7 +44,7 @@ if i == 0 {
 		if err != nil {
 			return fmt.Errorf("merge.go: MergeParts(...): read partition file: ", err)
 		}
-		if _, err := file.WriteAt(data, int64(i*chunkSize)); err != nil {
+		if _, err := file.WriteAt(data, int64(i)*chunkSize); err != nil {
 			return fmt.Errorf("merge.go: MergeParts(...): write partition data to output: ", err)
 		}
 	}
