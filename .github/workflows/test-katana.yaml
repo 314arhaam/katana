@@ -83,5 +83,73 @@ jobs:
 
       - name: Split with katana
         shell: bash
-        run: ./katana split -f image_file -s 128 && ls -lh
+        run: ./katana split -f alpine_image.tar -s 2048 && ls -lh
       
+      - name: Upload data patrs
+        uses: actions/upload-artifact@v4
+        with:
+          name: data_parts
+          path: alpine_image.tar.*
+          retention-days: 1
+      
+  merge_files:
+    needs: 
+    - split_file
+    runs-on: ubuntu-22.04
+    steps:
+      
+      - name: Download data parts
+        uses: actions/download-artifact@v4
+        with:
+          name: data_parts
+      
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: katana
+      
+      - name: Check files
+        shell: bash
+        run: ls -lh
+
+      - name: Execute permission
+        shell: bash
+        run: chmod +x katana
+
+      - name: Merge with katana
+        shell: bash
+        run: ./katana merge -f alpine_image.tar && ls -lh
+
+      - name: Upload merged file
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged_data
+          path: katana_alpine_image.tar
+          retention-days: 1
+
+  final_image_test:
+    needs: 
+      - merge_files
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Download merged data
+        uses: actions/download-artifact@v4
+        with:
+          name: merged_data
+      
+      - name: Show files
+        shell: bash
+        run: ls -lh
+        
+      - name: Load merged data into docker
+        shell: bash
+        run: docker load -i katana_alpine_image.tar
+
+      - name: Show images
+        shell: bash
+        run: docker images
+      
+      - name: Run loaded image
+        shell: bash
+        run: docker run --rm alpine:latest ls
+    
