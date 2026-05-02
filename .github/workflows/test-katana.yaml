@@ -118,7 +118,11 @@ jobs:
 
       - name: Merge with katana
         shell: bash
-        run: ./katana merge -f alpine_image.tar && ls -lh
+        run: ./katana merge -f alpine_image.tar
+
+      - name: Show files
+        shell: bash
+        run: ls -l *.tar*
 
       - name: Upload merged file
         uses: actions/upload-artifact@v4
