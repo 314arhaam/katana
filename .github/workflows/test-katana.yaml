@@ -1,0 +1,87 @@
+name: "Split a docker image, merge and run it"
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build_katana:
+    runs-on: ubuntu-22.04
+    steps:
+      
+      - uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      
+      - name: Go mod tidy
+        run: go mod tidy
+      
+      - name: Build go binaries
+        shell: bash
+        run: GOOS='linux' GOARCH='amd64' CGO_ENABLED=0 go build -o katana main.go
+      
+      - name: Upload katana binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: katana
+          path: katana
+          retention-days: 1
+  
+  pull_image:
+    runs-on: ubuntu-22.04
+    steps:
+      
+      - name: Check docker
+        shell: bash
+        run: docker ps
+
+      - name: Pull Alpine image
+        shell: bash
+        run: docker pull alpine:latest
+
+      - name: Check image
+        shell: bash
+        run: docker run -it --rm alpyne:latest ls
+
+      - name: Save image
+        shell: bash
+        run: docker image save alpine:latest -o alpine_image.tar && ls -lh
+
+      - name: Upload saved image
+        uses: actions/upload-artifact@v4
+        with:
+          name: image_file
+          path: alpine_image.tar
+          retention-days: 1
+  
+  split_file:
+    needs: 
+      - pull_image
+      - build_katana
+    runs-on: ubuntu-22.04
+    steps:
+      
+      - name: Download image
+        uses: actions/download-artifact@v4
+        with:
+          name: image_file
+      
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: katana
+      
+      - name: Check files
+        shell: bash
+        run: ls -lh
+
+      - name: Execute permission
+        shell: bash
+        run: chmod +x katana
+
+      - name: Split with katana
+        shell: bash
+        run: ./katana split -f image_file -s 128 && ls -lh
+      
