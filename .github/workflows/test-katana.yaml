@@ -43,7 +43,7 @@ jobs:
 
       - name: Check image
         shell: bash
-        run: docker run -it --rm alpine:latest ls
+        run: docker run --rm alpine:latest ls
 
       - name: Save image
         shell: bash
